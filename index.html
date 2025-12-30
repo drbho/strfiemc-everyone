@@ -3,188 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StrifeMC - Official Portal</title>
+    <title>StrifeMC - Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #1a0f0d; color: #d6d3d1; scroll-behavior: smooth; overflow-x: hidden; }
+        body { font-family: 'Poppins', sans-serif; background-color: #1a0f0d; color: #d6d3d1; overflow-x: hidden; }
         .medieval { font-family: 'MedievalSharp', cursive; }
         .gold-border { border-color: #D4AF37; }
         .gold-text { color: #D4AF37; }
         .bg-brown-dark { background-color: #2b1d19; }
-        .input-style { @apply w-full p-3 rounded bg-[#1a0f0d] border border-stone-700 focus:border-[#D4AF37] outline-none text-white transition-all; }
-        .btn-gold { @apply bg-[#D4AF37] hover:bg-white text-[#1a0f0d] font-bold py-3 px-6 rounded transition-all uppercase shadow-lg cursor-pointer text-center block no-underline; }
-        .nav-link { @apply hover:text-[#D4AF37] transition-colors cursor-pointer text-xs font-bold uppercase tracking-widest; }
-        .section-fade { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .staff-card { @apply bg-black/40 p-6 rounded-2xl border gold-border hover:scale-105 transition-all flex flex-col items-center shadow-xl relative; }
-        .staff-skin { height: 200px; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.6)); z-index: 10; }
-        .glow-founder { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; background: radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%); z-index: 1; }
-        .store-card { @apply bg-stone-900/50 p-6 rounded-xl border border-stone-800 hover:border-[#D4AF37] transition-all flex flex-col; }
+        .input-style { @apply w-full p-3 rounded bg-[#130a09] border border-stone-800 focus:border-[#D4AF37] outline-none text-white transition-all text-sm; }
+        .btn-gold { @apply bg-[#D4AF37] hover:bg-white text-[#1a0f0d] font-bold py-3 px-6 rounded transition-all uppercase shadow-lg cursor-pointer text-center block no-underline text-sm; }
+        .nav-link { @apply hover:text-[#D4AF37] transition-colors cursor-pointer text-[10px] font-bold uppercase tracking-widest whitespace-nowrap; }
+        .section-fade { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .staff-card { @apply bg-black/40 p-4 rounded-xl border gold-border flex flex-col items-center relative overflow-hidden; }
+        .staff-skin { height: 150px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); z-index: 10; }
+        .store-card { @apply bg-stone-900/50 p-5 rounded-xl border border-stone-800 flex flex-col; }
+        @media (max-width: 640px) { .medieval { font-size: 1.5rem !important; } .staff-skin { height: 120px; } }
     </style>
 </head>
 <body>
 
     <div id="loginOverlay" class="fixed inset-0 z-[2000] bg-[#1a0f0d] flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-brown-dark p-10 rounded-2xl border-2 gold-border shadow-2xl text-center">
-            <h2 class="medieval text-5xl gold-text mb-4">StrifeMC</h2>
-            <p class="mb-8 text-stone-400 text-xs font-bold uppercase tracking-widest">Identificati per la sessione</p>
-            <input type="text" id="loginNick" placeholder="Nickname Minecraft" class="input-style text-center text-xl mb-6">
-            <button onclick="doLogin()" id="loginBtn" class="btn-gold w-full text-lg uppercase">Accedi</button>
+        <div class="max-w-sm w-full bg-brown-dark p-8 rounded-2xl border-2 gold-border shadow-2xl text-center">
+            <h2 class="medieval text-4xl gold-text mb-2">StrifeMC</h2>
+            <p class="mb-6 text-stone-500 text-[10px] uppercase tracking-widest">Inserisci il tuo Nickname</p>
+            <input type="text" id="loginNick" placeholder="Nickname" class="input-style text-center mb-4">
+            <button onclick="doLogin()" id="loginBtn" class="btn-gold w-full">Entra</button>
+            <button onclick="openStaffModal()" class="mt-4 text-[9px] text-stone-500 uppercase hover:text-white transition-all underline">Accesso Staff</button>
+        </div>
+    </div>
+
+    <div id="staffModal" class="hidden fixed inset-0 z-[3000] bg-black/90 flex items-center justify-center p-4">
+        <div class="max-w-xs w-full bg-stone-900 p-6 rounded-xl border border-red-900 shadow-2xl">
+            <h3 class="medieval text-xl text-red-600 mb-4 text-center">Area Riservata</h3>
+            <input type="password" id="staffPass" placeholder="Password Staff" class="input-style border-red-900 mb-4 text-center">
+            <div class="flex space-x-2">
+                <button onclick="closeStaffModal()" class="w-1/2 bg-stone-800 text-white py-2 rounded text-xs uppercase">Chiudi</button>
+                <button onclick="checkStaffLogin()" class="w-1/2 bg-red-900 text-white py-2 rounded text-xs uppercase font-bold">Login</button>
+            </div>
         </div>
     </div>
 
     <div id="mainContent" class="hidden min-h-screen flex flex-col">
-        <nav class="bg-[#1a0f0d] p-4 border-b gold-border sticky top-0 z-50 shadow-2xl">
-            <div class="container mx-auto flex justify-between items-center">
-                <div class="medieval text-3xl gold-text">Strife<span class="text-white">MC</span></div>
-                <div class="hidden md:flex space-x-6 items-center font-bold">
+        <nav class="bg-[#1a0f0d] p-3 border-b gold-border sticky top-0 z-50 shadow-xl">
+            <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="medieval text-2xl gold-text">StrifeMC</div>
+                <div class="flex flex-wrap justify-center gap-4">
                     <span onclick="showSection('home')" class="nav-link">Home</span>
-                    <span onclick="showSection('hall')" class="nav-link">Top Staffer</span>
-                    <span onclick="showSection('store')" class="nav-link gold-text">Store VIP</span>
+                    <span onclick="showSection('hall')" class="nav-link">Staff</span>
+                    <span onclick="showSection('store')" class="nav-link gold-text">Store</span>
                     <span onclick="showSection('apply')" class="nav-link text-yellow-500">Provini</span>
-                    <span onclick="showSection('report')" class="text-red-500 hover:text-red-400 cursor-pointer text-xs font-bold uppercase tracking-widest">Report</span>
-                </div>
-                <div class="flex items-center space-x-3 bg-stone-900 px-3 py-2 rounded-lg border border-stone-700">
-                    <img id="userHead" src="" class="w-6 h-6 rounded-sm">
-                    <span id="displayNick" class="gold-text text-xs font-bold uppercase"></span>
+                    <span onclick="showSection('report')" class="nav-link text-red-500">Report</span>
+                    <span id="staffChatLink" onclick="showSection('staffChat')" class="nav-link text-cyan-400 hidden">Staff Chat</span>
                 </div>
             </div>
         </nav>
 
-        <main class="container mx-auto py-16 px-4 flex-grow">
-            <section id="homeSection" class="section-fade grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="space-y-8">
-                    <h1 class="medieval text-7xl text-white uppercase leading-tight">Strife<span class="gold-text italic">MC</span></h1>
-                    <div id="timer" class="text-4xl medieval gold-text font-bold">00:00:00:00</div>
-                    <div class="bg-brown-dark p-6 rounded-xl border-2 gold-border inline-block shadow-2xl">
-                        <code class="text-2xl gold-text font-mono">play.strifemc.it</code>
-                    </div>
+        <main class="container mx-auto py-8 px-4 flex-grow">
+            <section id="homeSection" class="section-fade text-center space-y-8">
+                <h1 class="medieval text-5xl sm:text-7xl text-white uppercase">Strife<span class="gold-text italic">MC</span></h1>
+                <div id="timer" class="text-2xl sm:text-4xl medieval gold-text tracking-widest">00:00:00:00</div>
+                <div class="bg-brown-dark p-4 rounded-xl border gold-border inline-block">
+                    <code class="text-sm sm:text-xl gold-text font-mono">play.strifemc.it</code>
                 </div>
-                <div class="bg-[#232428] p-1 rounded-2xl border-2 gold-border">
-                    <iframe src="https://discord.com/widget?id=1328404227315531858&theme=dark" width="100%" height="400" frameborder="0"></iframe>
+                <div class="max-w-md mx-auto bg-[#232428] p-1 rounded-xl border gold-border shadow-2xl overflow-hidden">
+                    <iframe src="https://discord.com/widget?id=1328404227315531858&theme=dark" width="100%" height="300" frameborder="0"></iframe>
+                </div>
+            </section>
+
+            <section id="staffChatSection" class="hidden section-fade max-w-2xl mx-auto">
+                <div class="bg-stone-900/80 rounded-2xl border border-cyan-900 shadow-2xl overflow-hidden">
+                    <div class="bg-cyan-900/20 p-4 border-b border-cyan-900 flex justify-between items-center">
+                        <h3 class="medieval text-cyan-400">Canale Criptato Staff</h3>
+                    </div>
+                    <div id="chatBox" class="h-64 overflow-y-auto p-4 space-y-3 text-xs bg-black/20"></div>
+                    <div class="p-4 bg-black/40 flex gap-2">
+                        <input type="text" id="staffMsg" placeholder="Scrivi un messaggio..." class="input-style border-cyan-900">
+                        <button onclick="sendStaffMessage()" class="bg-cyan-700 hover:bg-cyan-600 px-4 rounded text-white font-bold">➜</button>
+                    </div>
                 </div>
             </section>
 
             <section id="hallSection" class="hidden section-fade">
-                <h2 class="medieval text-5xl gold-text text-center mb-16 uppercase">Staffer</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <div class="staff-card border-stone-400"><img src="https://visage.surgeplay.com/full/256/gianguid124" class="staff-skin"><h3 class="medieval text-2xl text-stone-300 mt-4">gianguid124</h3><span class="text-[9px] text-stone-400 font-bold uppercase tracking-widest">Sr. Helper</span></div>
-                    <div class="staff-card border-cyan-700"><img src="https://visage.surgeplay.com/full/256/fanzey1" class="staff-skin"><h3 class="medieval text-2xl text-cyan-400 mt-4">fanzey1</h3><span class="text-[9px] text-cyan-400 font-bold uppercase tracking-widest">Developer</span></div>
-                    <div class="staff-card bg-[#302310]/40 border-yellow-400"><div class="glow-founder"></div><img src="https://visage.surgeplay.com/full/256/Craix19" class="staff-skin"><h3 class="medieval text-2xl text-yellow-400 mt-4">Craix19</h3><span class="text-[9px] text-yellow-500 font-bold uppercase tracking-widest">Founder</span></div>
-                    <div class="staff-card bg-[#302310]/40 border-yellow-400"><div class="glow-founder"></div><img src="https://visage.surgeplay.com/full/256/RangerKng" class="staff-skin"><h3 class="medieval text-2xl text-yellow-400 mt-4">RangerKng</h3><span class="text-[9px] text-yellow-500 font-bold uppercase tracking-widest">Founder</span></div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="staff-card border-stone-400"><img src="https://visage.surgeplay.com/full/256/gianguid124" class="staff-skin"><h3 class="medieval text-lg text-stone-300 mt-2 text-center">gianguid124</h3><span class="text-[8px] text-stone-400 font-bold uppercase">Sr. Helper</span></div>
+                    <div class="staff-card border-cyan-700"><img src="https://visage.surgeplay.com/full/256/fanzey1" class="staff-skin"><h3 class="medieval text-lg text-cyan-400 mt-2 text-center">fanzey1</h3><span class="text-[8px] text-cyan-400 font-bold uppercase">Developer</span></div>
+                    <div class="staff-card border-yellow-400"><img src="https://visage.surgeplay.com/full/256/Craix19" class="staff-skin"><h3 class="medieval text-lg text-yellow-400 mt-2 text-center">Craix19</h3><span class="text-[8px] text-yellow-500 font-bold uppercase">Founder</span></div>
+                    <div class="staff-card border-yellow-400"><img src="https://visage.surgeplay.com/full/256/RangerKng" class="staff-skin"><h3 class="medieval text-lg text-yellow-400 mt-2 text-center">RangerKng</h3><span class="text-[8px] text-yellow-500 font-bold uppercase">Founder</span></div>
                 </div>
             </section>
 
             <section id="storeSection" class="hidden section-fade">
-                <h2 class="medieval text-5xl gold-text text-center mb-12 uppercase">Store</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="store-card"><h3 class="medieval text-2xl text-white mb-2">VIP Aether</h3><div class="mt-auto"><p class="text-3xl gold-text font-bold mb-4">€5.00</p><a href="https://www.paypal.me/RangerKing60/5" target="_blank" class="btn-gold py-2 text-xs">Acquista</a></div></div>
-                    <div class="store-card border-yellow-600"><h3 class="medieval text-2xl gold-text mb-2">VIP Titan</h3><div class="mt-auto"><p class="text-3xl gold-text font-bold mb-4">€25.00</p><a href="https://www.paypal.me/RangerKing60/25" target="_blank" class="btn-gold py-2 text-xs">Acquista</a></div></div>
-                    <div class="store-card border-blue-900"><h3 class="medieval text-2xl text-blue-400 mb-2">Kit Supreme</h3><div class="mt-auto"><p class="text-3xl text-blue-400 font-bold mb-4">€8.00</p><a href="https://www.paypal.me/RangerKing60/8" target="_blank" class="w-full block bg-blue-800 text-white font-bold py-2 rounded text-center text-xs uppercase">Sblocca</a></div></div>
-                    <div class="store-card border-red-900"><h3 class="medieval text-2xl text-red-500 mb-2">Reset Stats</h3><div class="mt-auto"><p class="text-3xl text-red-500 font-bold mb-4">€3.50</p><a href="https://www.paypal.me/RangerKing60/3.5" target="_blank" class="w-full block bg-red-800 text-white font-bold py-2 rounded text-center text-xs uppercase">Resetta</a></div></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                    <div class="store-card"><h3 class="medieval text-xl text-white mb-2">VIP Aether</h3><p class="text-2xl gold-text font-bold mb-4">€5.00</p><a href="https://www.paypal.me/RangerKing60/5" class="btn-gold">Acquista</a></div>
+                    <div class="store-card border-yellow-600"><h3 class="medieval text-xl gold-text mb-2">VIP Titan</h3><p class="text-2xl gold-text font-bold mb-4">€25.00</p><a href="https://www.paypal.me/RangerKing60/25" class="btn-gold">Acquista</a></div>
+                    <div class="store-card border-blue-900"><h3 class="medieval text-xl text-blue-400 mb-2">Kit Supreme</h3><p class="text-2xl text-blue-400 font-bold mb-4">€8.00</p><a href="https://www.paypal.me/RangerKing60/8" class="bg-blue-800 py-3 rounded text-white font-bold text-sm">SBLOCCA</a></div>
+                    <div class="store-card border-red-900"><h3 class="medieval text-xl text-red-500 mb-2">Reset Stats</h3><p class="text-2xl text-red-500 font-bold mb-4">€3.50</p><a href="https://www.paypal.me/RangerKing60/3.5" class="bg-red-800 py-3 rounded text-white font-bold text-sm uppercase">Resetta</a></div>
                 </div>
             </section>
 
-            <section id="applySection" class="hidden section-fade max-w-4xl mx-auto">
-                <div class="bg-brown-dark p-10 rounded-2xl border gold-border">
-                    <h2 class="medieval text-4xl gold-text mb-10 text-center uppercase">Provini Staff</h2>
-                    <form id="applyForm" class="space-y-8">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <input type="text" id="apply_discord_nick" required class="input-style" placeholder="Nome su Discord">
-                            <select id="apply_role" onchange="generateQs()" class="input-style gold-text font-bold">
-                                <option value="">-- Seleziona Ruolo --</option>
-                                <option value="Trainee_SS">Trainee / SS Supporter</option>
-                                <option value="Pluginner">Pluginner</option>
-                                <option value="Developer">Developer</option>
-                            </select>
-                        </div>
-                        <div id="dynamicQs" class="space-y-6 pt-6 border-t border-stone-800"></div>
-                        <button type="submit" id="submitBtn" class="btn-gold w-full hidden py-4 text-xl">Invia Provino</button>
+            <section id="applySection" class="hidden section-fade max-w-xl mx-auto">
+                <div class="bg-brown-dark p-6 rounded-xl border gold-border shadow-xl">
+                    <h2 class="medieval text-2xl gold-text mb-6 text-center uppercase">Modulo Provino</h2>
+                    <form id="applyForm" class="space-y-4">
+                        <input type="text" id="apply_discord_nick" required class="input-style" placeholder="Discord Nick (User#0000)">
+                        <select id="apply_role" onchange="generateQs()" class="input-style gold-text font-bold">
+                            <option value="">-- Seleziona Ruolo --</option>
+                            <option value="Trainee_SS">Trainee / SS Supporter</option>
+                            <option value="DiscordMod">Chat Moderator Discord</option>
+                            <option value="Pluginner">Pluginner</option>
+                        </select>
+                        <div id="dynamicQs" class="space-y-4 pt-4 border-t border-stone-800"></div>
+                        <button type="submit" id="submitBtn" class="btn-gold w-full hidden">Invia Candidatura</button>
                     </form>
                 </div>
             </section>
 
-            <section id="reportSection" class="hidden section-fade max-w-2xl mx-auto">
-                <h2 class="medieval text-4xl text-red-600 mb-8 text-center uppercase">Report</h2>
-                <form id="reportForm" class="space-y-4 bg-black/40 p-8 rounded-xl border border-red-900 shadow-2xl">
-                    <input type="text" id="rep_target" placeholder="Player segnalato" class="input-style border-red-900">
-                    <textarea id="rep_reason" placeholder="Dettagli..." class="input-style border-red-900 min-h-[100px]"></textarea>
-                    <button type="submit" class="w-full bg-red-800 py-4 font-bold rounded uppercase">Invia Segnalazione</button>
+            <section id="reportSection" class="hidden section-fade max-w-md mx-auto">
+                <form id="reportForm" class="bg-black/40 p-6 rounded-xl border border-red-900 space-y-4">
+                    <h2 class="medieval text-2xl text-red-600 text-center uppercase">Segnala Player</h2>
+                    <input type="text" id="rep_target" placeholder="Nome segnalato" class="input-style border-red-900">
+                    <textarea id="rep_reason" placeholder="Motivo e prove..." class="input-style border-red-900 min-h-[80px]"></textarea>
+                    <button type="submit" class="w-full bg-red-800 py-3 rounded font-bold uppercase text-sm">Invia</button>
                 </form>
             </section>
         </main>
-
-        <footer class="bg-black py-8 border-t border-stone-800 text-center text-[10px] text-stone-600 uppercase tracking-widest">
-            StrifeMC © 2026 - Official Management Portal
-        </footer>
     </div>
 
     <script>
         const WEBHOOK_LOGS = 'https://discord.com/api/webhooks/1455535805941420284/GwGwF6tjtHs74WlVlGs8MJNt20Bz00E29IFqZvZ1diwp86u3CfgqIFoHoUur9eFrQ4tu';
         const WEBHOOK_APPLY = 'https://discord.com/api/webhooks/1455482089691549853/wakB6MPp_qHri9gJtoydm7_QCilw8VaPZS1BJlBJGeN50nbGm9z3TYgPhQL4B6P1P8KE';
-
+        const STAFF_PASS = "STRIFE2026";
         let currentNick = "";
+        let isStaff = false;
 
         const QUESTIONS = {
-            "Trainee_SS": ["1. IGN e Età?","2. Esperienze passate?","3. Perché noi?","4. Tools SS conosciuti?","5. Check Prefetch come si fa?","6. Cosa cerchi nel Regedit?","7. Come vedi se i log sono puliti?","8. Ghost vs Blatant?","9. Orari disponibili?","10. Cosa faresti se un player ammette?"],
-            "Pluginner": ["1. Età?","2. Conoscenza Java?","3. Exp Spigot API?","4. Database?","5. Portfolio."],
-            "Developer": ["1. Età?","2. Linguaggi?","3. Esperienze?","4. Sicurezza Web?"]
+            "Trainee_SS": ["1. Nome, IGN e Età?","2. Esperienze pregresse?","3. Tools SS conosciuti (es. Echo)?","4. Come controlli il Prefetch?","5. Cosa cerchi nel Regedit?","6. Strings Process Hacker sospette?","7. Come verifichi log puliti?","8. Ghost vs Blatant?","9. Orari?","10. Cosa fai se un player ammette?"],
+            "DiscordMod": [
+                "1. Quanti anni hai?","2. Esperienza staff Discord (dove e come)?","3. Perché vuoi questo ruolo qui?","4. Gestione Spam, Flood e Flame?","5. Cosa fai per insulti ripetuti?","6. Comportamento se un utente provoca lo Staff?","7. Sai mantenere calma sotto pressione?","8. Tempo settimanale dedicato?","9. Come gestisci ticket professionalmente?","10. Cosa fai se non sai risolvere un caso?",
+                "11. DEFINISCI: Spam, Flood, Flame, Nuke, Raid, Dox"
+            ],
+            "Pluginner": ["1. Età?","2. Conoscenza Java?","3. MySQL/MongoDB?","4. Portfolio link."]
         };
 
-        const TAGS = { "Trainee_SS": "<@&1445058629521637509>", "Pluginner": "<@&1455476635611435155>", "Developer": "<@&1445677157451038731>" };
+        const TAGS = { "Trainee_SS": "<@&1445058629521637509>", "DiscordMod": "<@&1454209004967432212>", "Pluginner": "<@&1455476635611435155>" };
 
-        // Funzione per pulire lo User Agent (quello che hai postato tu)
-        function cleanBrowserInfo() {
-            const ua = navigator.userAgent;
-            let browser = "Sconosciuto";
-            let os = "Sconosciuto";
+        function openStaffModal() { document.getElementById('staffModal').classList.remove('hidden'); }
+        function closeStaffModal() { document.getElementById('staffModal').classList.add('hidden'); }
 
-            if (ua.includes("Win")) os = "Windows";
-            else if (ua.includes("Mac")) os = "MacOS";
-            else if (ua.includes("Linux")) os = "Linux";
-
-            if (ua.includes("Chrome")) browser = "Google Chrome";
-            else if (ua.includes("Firefox")) browser = "Firefox";
-            else if (ua.includes("Safari") && !ua.includes("Chrome")) browser = "Safari";
-
-            return `${os} - ${browser}`;
+        function checkStaffLogin() {
+            if(document.getElementById('staffPass').value === STAFF_PASS) {
+                isStaff = true; alert("Staff Mode Attiva!");
+                document.getElementById('staffChatLink').classList.remove('hidden');
+                closeStaffModal();
+            } else { alert("Negato."); }
         }
 
         async function doLogin() {
             const nick = document.getElementById('loginNick').value.trim();
-            if(nick.length < 3) return alert("Inserisci un Nick!");
+            if(nick.length < 3) return alert("Nick troppo corto!");
             currentNick = nick;
-            document.getElementById('loginBtn').innerText = "TRACCIAMENTO...";
-
-            const screenRes = `${window.screen.width}x${window.screen.height}`;
-            const browserClean = cleanBrowserInfo();
-            const language = navigator.language;
+            
+            const info = `${navigator.platform} - ${navigator.userAgent.includes("Mobi") ? "MOBILE" : "PC"}`;
 
             await fetch(WEBHOOK_LOGS, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     embeds: [{
-                        title: "🟢 NUOVA SESSIONE",
-                        color: 16761095,
-                        thumbnail: { url: `https://minotar.net/helm/${nick}/100.png` },
+                        title: isStaff ? "🛡️ LOGIN STAFF" : "🟢 LOGIN UTENTE",
+                        color: isStaff ? 16711680 : 16761095,
                         fields: [
-                            { name: "👤 Nickname", value: `**${nick}**`, inline: true },
-                            { name: "🖥️ Sistema & Browser", value: `\`${browserClean}\``, inline: true },
-                            { name: "📺 Risoluzione", value: `\`${screenRes}\``, inline: true },
-                            { name: "🌍 Lingua", value: language, inline: true },
-                            { name: "🔗 Skin", value: `[Download](https://minotar.net/skin/${nick})`, inline: true }
-                        ],
-                        footer: { text: `Rilevato: ${new Date().toLocaleString('it-IT')}` }
+                            { name: "👤 Nick", value: nick, inline: true },
+                            { name: "📱 Device", value: info, inline: true },
+                            { name: "🔗 Skin", value: `[Link](https://minotar.net/skin/${nick})`, inline: true }
+                        ]
                     }]
                 })
             });
 
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('mainContent').classList.remove('hidden');
-            document.getElementById('displayNick').innerText = currentNick;
-            document.getElementById('userHead').src = `https://minotar.net/helm/${currentNick}/32.png`;
+            document.getElementById('displayNick')?.remove(); // Cleanup
             startTimer();
             showSection('home');
         }
@@ -195,7 +197,7 @@
             if(!role) { document.getElementById('submitBtn').classList.add('hidden'); return; }
             document.getElementById('submitBtn').classList.remove('hidden');
             QUESTIONS[role].forEach((q, i) => {
-                area.innerHTML += `<div><label class="gold-text text-xs font-bold uppercase mb-2 block">${q}</label><textarea id="ans_${i}" required class="input-style min-h-[80px]"></textarea></div>`;
+                area.innerHTML += `<div><label class="gold-text text-[10px] font-bold uppercase block mb-1">${q}</label><textarea id="ans_${i}" required class="input-style"></textarea></div>`;
             });
         }
 
@@ -209,19 +211,30 @@
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    content: `⚒️ **NUOVA CANDIDATURA ${role.toUpperCase()}** ${TAGS[role]}`,
+                    content: `⚒️ **CANDIDATURA ${role.toUpperCase()}** ${TAGS[role]}`,
                     embeds: [{
-                        title: "Risposte Provino",
+                        title: `Modulo di ${currentNick}`,
                         color: 13938487,
-                        fields: [
-                            { name: "Candidato", value: currentNick, inline: true },
-                            { name: "Modulo", value: resText.substring(0, 1024) }
-                        ]
+                        description: resText.substring(0, 2048)
                     }]
                 })
             });
-            alert("Inviato!"); location.reload();
+            alert("Inviato con successo!"); location.reload();
         });
+
+        async function sendStaffMessage() {
+            const msg = document.getElementById('staffMsg').value;
+            if(!msg) return;
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML += `<div><span class="text-cyan-400 font-bold">${currentNick}:</span> <span class="text-white">${msg}</span></div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+            document.getElementById('staffMsg').value = "";
+            await fetch(WEBHOOK_LOGS, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ content: `💬 **[STAFF CHAT]** \`${currentNick}\`: ${msg}` })
+            });
+        }
 
         function startTimer() {
             const target = new Date("Jan 21, 2026 16:00:00").getTime();
@@ -234,11 +247,13 @@
         }
 
         function showSection(id) {
-            ['home','hall','store','apply','report'].forEach(s => document.getElementById(s+'Section').classList.add('hidden'));
+            ['home','hall','store','apply','report','staffChat'].forEach(s => {
+                const el = document.getElementById(s+'Section');
+                if(el) el.classList.add('hidden');
+            });
             document.getElementById(id+'Section').classList.remove('hidden');
             window.scrollTo(0,0);
         }
     </script>
 </body>
 </html>
-
