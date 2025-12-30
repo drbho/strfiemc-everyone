@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StrifeMC - Official Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #1a0f0d; color: #d6d3d1; scroll-behavior: smooth; }
+        .medieval { font-family: 'MedievalSharp', cursive; }
+        .gold-border { border-color: #D4AF37; }
+        .gold-text { color: #D4AF37; }
+        .bg-brown-dark { background-color: #2b1d19; }
+        .input-style { @apply w-full p-3 rounded bg-[#1a0f0d] border border-stone-700 focus:border-[#D4AF37] outline-none text-white transition-all; }
+        .btn-gold { @apply bg-[#D4AF37] hover:bg-white text-[#1a0f0d] font-bold py-3 px-6 rounded transition-all uppercase shadow-lg cursor-pointer text-center block no-underline; }
+        .nav-link { @apply hover:text-[#D4AF37] transition-colors cursor-pointer text-xs font-bold uppercase tracking-widest; }
+        .rule-card { @apply bg-[#1a0f0d] p-4 rounded border border-stone-800 mb-4; }
+        .section-fade { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="loginOverlay" class="fixed inset-0 z-[2000] bg-[#1a0f0d] flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-brown-dark p-10 rounded-2xl border-2 gold-border shadow-2xl text-center">
+            <h2 class="medieval text-5xl gold-text mb-4">StrifeMC</h2>
+            <p class="mb-8 text-stone-400 text-xs font-bold uppercase tracking-widest">Identificati per entrare</p>
+            <input type="text" id="loginNick" placeholder="Nickname Minecraft" class="input-style text-center text-xl mb-6">
+            <button onclick="doLogin()" class="btn-gold w-full text-lg">Accedi</button>
+        </div>
+    </div>
+
+    <div id="mainContent" class="hidden min-h-screen flex flex-col">
+        
+        <nav class="bg-[#1a0f0d] p-4 border-b gold-border sticky top-0 z-50 shadow-2xl">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="medieval text-3xl gold-text">Strife<span class="text-white">MC</span></div>
+                <div class="hidden md:flex space-x-6 items-center">
+                    <span onclick="showSection('home')" class="nav-link">Home</span>
+                    <span onclick="showSection('rules')" class="nav-link text-yellow-500">Regole</span>
+                    <span onclick="showSection('store')" class="nav-link">Store VIP</span>
+                    <span onclick="showSection('kitpvp')" class="nav-link">Modalità</span>
+                    <span onclick="showSection('apply')" class="nav-link">Candidature</span>
+                    <span onclick="showSection('report')" class="text-red-500 hover:text-red-400 cursor-pointer text-xs font-bold uppercase tracking-widest">Segnala</span>
+                </div>
+                <div class="flex items-center space-x-3 bg-stone-900 px-3 py-2 rounded-lg border border-stone-700">
+                    <img id="userHead" src="" class="w-6 h-6 rounded-sm">
+                    <span id="displayNick" class="gold-text text-xs font-bold"></span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="bg-gradient-to-r from-[#3e2723] to-[#1a0f0d] py-10 border-b border-stone-800 text-center">
+            <h3 class="medieval text-xl gold-text mb-4 uppercase tracking-widest">Apertura Ufficiale</h3>
+            <div id="timer" class="text-5xl font-black text-white medieval flex justify-center space-x-4">00:00:00:00</div>
+            <p class="text-stone-500 mt-4 text-[10px] tracking-[0.3em] uppercase">21 Gennaio 2026 • 16:00</p>
+        </div>
+
+        <main class="container mx-auto py-12 px-4 flex-grow">
+            
+            <section id="homeSection" class="section-fade text-center py-10 space-y-6">
+                <h1 class="medieval text-6xl text-white uppercase">Benvenuto</h1>
+                <p class="text-stone-400 max-w-xl mx-auto italic">"Dove le leggende vengono forgiate nel fuoco."</p>
+                <div class="inline-block bg-brown-dark p-6 rounded-xl border gold-border">
+                    <span class="block text-[10px] text-stone-500 uppercase mb-2">Server IP</span>
+                    <span class="text-2xl font-bold gold-text font-mono">play.strifemc.it</span>
+                </div>
+            </section>
+
+            <section id="rulesSection" class="hidden section-fade max-w-4xl mx-auto">
+                <h2 class="medieval text-4xl gold-text mb-8 text-center uppercase tracking-widest">Regolamento Discord</h2>
+                <div class="bg-brown-dark p-8 rounded-2xl border gold-border shadow-2xl">
+                    <div class="space-y-4 text-sm text-stone-300">
+                        <div class="rule-card"><b class="text-white">1.1. Sii Rispettoso:</b> Tratta tutti con rispetto. Vietati odio e discriminazione.</div>
+                        <div class="rule-card"><b class="text-white">1.2. Niente Spam:</b> Vietato inondare i canali con messaggi o emoji.</div>
+                        <div class="rule-card"><b class="text-white">1.3. NSFW/Gore:</b> Severamente vietati contenuti espliciti.</div>
+                        <div class="rule-card"><b class="text-white">1.4. Niente Minacce:</b> Doxxing e DDoS portano al ban immediato.</div>
+                        <div class="rule-card"><b class="text-white">1.5. Pubblicità:</b> Vietata se non autorizzata dallo staff.</div>
+                    </div>
+                    <div class="mt-8 p-4 bg-red-900/20 border border-red-900 rounded text-center">
+                        <p class="text-red-400 font-bold uppercase text-[10px]">⚠️ Aprire un TICKET per poi non rispondere comporterà un WARN.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="storeSection" class="hidden section-fade">
+                <h2 class="medieval text-4xl gold-text mb-10 text-center uppercase">Gradi VIP Globali</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-brown-dark p-6 rounded-2xl border gold-border flex flex-col justify-between">
+                        <div><h3 class="medieval text-2xl text-white mb-2">AETHER</h3><p class="gold-text font-bold text-3xl mb-4">5€</p></div>
+                        <a href="https://www.paypal.me/RangerKing60/5" target="_blank" class="btn-gold text-xs">Acquista</a>
+                    </div>
+                    <div class="bg-brown-dark p-6 rounded-2xl border gold-border flex flex-col justify-between">
+                        <div><h3 class="medieval text-2xl text-white mb-2">ZENITH</h3><p class="gold-text font-bold text-3xl mb-4">12€</p></div>
+                        <a href="https://www.paypal.me/RangerKing60/12" target="_blank" class="btn-gold text-xs">Acquista</a>
+                    </div>
+                    <div class="bg-brown-dark p-6 rounded-2xl border-2 gold-border flex flex-col justify-between shadow-lg">
+                        <div><h3 class="medieval text-2xl text-yellow-500 mb-2">TITAN</h3><p class="gold-text font-bold text-3xl mb-4">25€</p></div>
+                        <a href="https://www.paypal.me/RangerKing60/25" target="_blank" class="btn-gold text-xs">Acquista</a>
+                    </div>
+                    <div class="bg-brown-dark p-6 rounded-2xl border-stone-600 flex flex-col justify-between">
+                        <div><h3 class="medieval text-2xl text-white mb-2">OBSIDIAN</h3><p class="gold-text font-bold text-3xl mb-4">45€</p></div>
+                        <a href="https://www.paypal.me/RangerKing60/45" target="_blank" class="btn-gold text-xs">Acquista</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="kitpvpSection" class="hidden section-fade max-w-4xl mx-auto">
+                <h2 class="medieval text-4xl gold-text mb-8 text-center uppercase tracking-widest">Potenziamenti</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-brown-dark p-8 rounded-2xl border border-stone-800">
+                        <h3 class="medieval text-2xl text-blue-400 mb-4 uppercase">BedWars</h3>
+                        <div class="flex justify-between items-center bg-[#1a0f0d] p-4 rounded">
+                            <span class="text-white font-bold">Reset Stats</span>
+                            <a href="https://www.paypal.me/RangerKing60/4" target="_blank" class="gold-text font-bold">4.00€</a>
+                        </div>
+                    </div>
+                    <div class="bg-brown-dark p-8 rounded-2xl border border-stone-800">
+                        <h3 class="medieval text-2xl text-red-500 mb-4 uppercase">KitPvP (Life Time)</h3>
+                        <div class="space-y-4">
+                            <div class="bg-[#1a0f0d] p-4 rounded flex justify-between items-center">
+                                <span>Kit OP (P3-S3)</span>
+                                <a href="https://www.paypal.me/RangerKing60/5" target="_blank" class="gold-text font-bold">5.00€</a>
+                            </div>
+                            <div class="bg-[#1a0f0d] p-4 rounded flex justify-between items-center">
+                                <span>Kit Supreme (Neth-S5)</span>
+                                <a href="https://www.paypal.me/RangerKing60/8" target="_blank" class="gold-text font-bold">8.00€</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="applySection" class="hidden section-fade max-w-3xl mx-auto">
+                <div class="bg-brown-dark p-8 rounded-2xl border gold-border shadow-2xl">
+                    <h2 class="medieval text-3xl gold-text mb-8 text-center uppercase">Modulo Staff</h2>
+                    <form id="applyForm" class="space-y-6">
+                        <div>
+                            <label class="gold-text text-[10px] font-bold uppercase block mb-2 tracking-widest">Discord Tag</label>
+                            <input type="text" id="apply_discord" placeholder="mario#0000" required class="input-style">
+                        </div>
+                        <div>
+                            <label class="gold-text text-[10px] font-bold uppercase block mb-2 tracking-widest">Seleziona Ruolo</label>
+                            <select id="apply_role" onchange="generateQs()" class="input-style gold-text font-bold">
+                                <option value="">-- Scegli --</option>
+                                <option value="Pluginner">Pluginner (Minecraft Java)</option>
+                                <option value="Developer">Developer (Web/System)</option>
+                                <option value="Trainee_SS">Trainee / SS Supporter</option>
+                                <option value="DiscordMod">Discord Moderator</option>
+                            </select>
+                        </div>
+                        <div id="dynamicQs" class="space-y-10 pt-4 border-t border-stone-800"></div>
+                        <button type="submit" id="submitBtn" class="btn-gold w-full hidden py-4">Invia Candidatura</button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="reportSection" class="hidden section-fade max-w-2xl mx-auto">
+                <div class="bg-brown-dark p-8 rounded-2xl border border-red-900 shadow-2xl">
+                    <h2 class="medieval text-3xl text-red-500 mb-8 text-center uppercase">Segnalazione</h2>
+                    <form id="reportForm" class="space-y-6">
+                        <select id="report_type" onchange="toggleReportFields()" class="input-style border-red-900/40">
+                            <option value="Minecraft">Minecraft</option>
+                            <option value="Discord">Discord</option>
+                            <option value="Bug">Bug Report</option>
+                        </select>
+                        <input type="text" id="rep_target" placeholder="Nickname segnalato" required class="input-style border-red-900/40">
+                        <textarea id="rep_reason" placeholder="Prove e dettagli..." rows="4" required class="input-style border-red-900/40"></textarea>
+                        <button type="submit" class="w-full bg-red-800 text-white font-bold py-4 rounded uppercase">Invia</button>
+                    </form>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="bg-[#130b0a] py-12 border-t border-stone-800 mt-12 text-center">
+            <p class="text-stone-500 text-[10px] uppercase mb-4">© 2026 StrifeMC Network. All Rights Reserved.</p>
+            <div class="max-w-2xl mx-auto p-4 bg-stone-900/40 rounded border border-stone-800">
+                <p class="text-stone-600 text-[9px] leading-relaxed italic">
+                    StrifeMC non è affiliato a Mojang AB o Microsoft Corporation. Minecraft è un marchio registrato di Mojang Synergies AB.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1455482089691549853/wakB6MPp_qHri9gJtoydm7_QCilw8VaPZS1BJlBJGeN50nbGm9z3TYgPhQL4B6P1P8KE';
+
+        const QUESTIONS = {
+            "Pluginner": [
+                "1. Quanti anni hai e da quanto tempo giochi a Minecraft?",
+                "2. Da quanto tempo sviluppi plugin Minecraft e con quali versioni (es. 1.8, 1.16, 1.20)?",
+                "3. Che linguaggi conosci? (Java obbligatorio, altri come SQL, YAML, JSON, ecc.)",
+                "4. Hai già creato plugin personalizzati? Se sì, descrivine uno o più.",
+                "5. Sai lavorare con API come Spigot, Paper o Bukkit? Quale preferisci?",
+                "6. Sai integrare database (MySQL / SQLite) nei plugin?",
+                "7. Come gestisci bug o problemi di performance?",
+                "8. Sai lavorare in team (Git, collaborazione con staff)?",
+                "9. Se ti chiedessimo di creare un plugin su misura, come organizzeresti il lavoro?",
+                "10. Quanto tempo puoi dedicare e perché vuoi entrare su StrifeMC?",
+                "11. Sai settupare plugin come luckperms?"
+            ],
+            "Developer": [
+                "1. Età?", "2. Conoscenze Web (HTML/JS/PHP)?", "3. Conoscenza sistemi Linux/VPS?", "4. Esperienze passate come Dev?", "5. Gestione exploit e sicurezza?"
+            ],
+            "Trainee_SS": [
+                "1. Età?", "2. Esperienza controlli SS?", "3. Tool conosciuti (Anydesk, Echo, etc)?", "4. Come trovi un cheat ghost?", "5. Ore settimanali?"
+            ],
+            "DiscordMod": [
+                "1. Età?", "2. Esperienza Moderazione?", "3. Come gestisci un raid?", "4. Conosci le impostazioni dei ruoli Discord?"
+            ]
+        };
+
+        const TAGS = { 
+            "Pluginner": "<@&1455476635611435155>", 
+            "Developer": "<@&1445677157451038731>", 
+            "Trainee_SS": "<@&1445058629521637509>", 
+            "DiscordMod": "<@&1454209004967432212>" 
+        };
+
+        function doLogin() {
+            const nick = document.getElementById('loginNick').value.trim();
+            if(nick.length < 3) return alert("Nickname troppo corto!");
+            localStorage.setItem('mcNick', nick);
+            location.reload();
+        }
+
+        window.onload = () => {
+            const nick = localStorage.getItem('mcNick');
+            if(nick) {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainContent').classList.remove('hidden');
+                document.getElementById('displayNick').innerText = nick;
+                document.getElementById('userHead').src = `https://minotar.net/helm/${nick}/32.png`;
+                startTimer();
+                showSection('home');
+            }
+        }
+
+        function showSection(id) {
+            ['home','rules','store','apply', 'report', 'kitpvp'].forEach(s => document.getElementById(s+'Section').classList.add('hidden'));
+            document.getElementById(id+'Section').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function generateQs() {
+            const role = document.getElementById('apply_role').value;
+            const area = document.getElementById('dynamicQs');
+            area.innerHTML = "";
+            if(!role) { document.getElementById('submitBtn').classList.add('hidden'); return; }
+            document.getElementById('submitBtn').classList.remove('hidden');
+            QUESTIONS[role].forEach((q, i) => {
+                area.innerHTML += `<div class="space-y-3"><label class="gold-text text-sm font-bold uppercase block">${q}</label><textarea id="ans_${i}" required class="input-style min-h-[100px]"></textarea></div>`;
+            });
+        }
+
+        function startTimer() {
+            const target = new Date("Jan 21, 2026 16:00:00").getTime();
+            setInterval(() => {
+                const diff = target - new Date().getTime();
+                if (diff < 0) { document.getElementById('timer').innerText = "APERTO!"; return; }
+                const d = Math.floor(diff / 86400000), h = Math.floor((diff % 86400000) / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+                document.getElementById('timer').innerText = `${d}d ${h}h ${m}m ${s}s`;
+            }, 1000);
+        }
+
+        function toggleReportFields() {
+            const type = document.getElementById('report_type').value;
+            document.getElementById('rep_target').placeholder = type === "Discord" ? "User Discord" : "Nickname Player";
+        }
+
+        document.getElementById('applyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const role = document.getElementById('apply_role').value, nick = localStorage.getItem('mcNick'), disc = document.getElementById('apply_discord').value;
+            let resText = "";
+            QUESTIONS[role].forEach((q, i) => resText += `**${q}**\n${document.getElementById('ans_'+i).value}\n\n`);
+
+            await fetch(WEBHOOK_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
+                content: `⚒️ **NUOVA CANDIDATURA ${role.toUpperCase()}** ${TAGS[role]}`,
+                embeds: [{ title: `Richiesta Staff StrifeMC`, color: 13938487, fields: [{ name: "👤 Nick", value: nick, inline: true }, { name: "📱 Discord", value: disc, inline: true }, { name: "📝 Risposte", value: resText.substring(0, 1024) }] }]
+            })});
+            alert("Candidatura inviata!"); location.reload();
+        });
+
+        document.getElementById('reportForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nick = localStorage.getItem('mcNick'), type = document.getElementById('report_type').value, target = document.getElementById('rep_target').value, reason = document.getElementById('rep_reason').value;
+            await fetch(WEBHOOK_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
+                content: `🚨 **REPORT ${type.toUpperCase()}** <@&1454209004967432212>`,
+                embeds: [{ title: `Segnalazione`, color: 15158332, fields: [{ name: "Da", value: nick, inline: true }, { name: "Contro", value: target, inline: true }, { name: "Dettagli", value: reason }] }]
+            })});
+            alert("Segnalazione inviata!"); e.target.reset();
+        });
+    </script>
+</body>
+</html>
